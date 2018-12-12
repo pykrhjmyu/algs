@@ -20,8 +20,12 @@ class KMP
 			mode = br.readLine();
 		}catch(IOException e){System.out.println("wrong!");}
 
-		DFA test = new DFA("ababac");
-		System.out.println(test.getNextStatus('b', 5));
+		DFA test = new DFA(mode);
+		for(int i=0,j=0;i<txt.length();i++){
+			j = test.getNextStatus(txt.charAt(i),j);
+			if(j == mode.length()){
+				System.out.println("find!");break;}
+		}
 	}
 }
 
@@ -30,10 +34,15 @@ class DFA
 	String s;
 	int[][] dfa;
 
-	DFA(String s){
-		this.s = s;
-		dfa = new int[26][s.length()];
-		for(int j = 0, X = 0;j<s.length();j++){
+	DFA(String str){
+		s = str;
+		dfa = new int[26][str.length()];
+		build();
+	}
+
+	void build(){
+		dfa[s.charAt(0)-'a'][0]=1;
+		for(int j = 1, X = 0;j<s.length();j++){
 			for(int i=0;i<26;i++){
 				dfa[i][j] = dfa[i][X];
 			}
